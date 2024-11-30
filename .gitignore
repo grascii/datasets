@@ -1,3 +1,4 @@
 env/
 normalized/
 images/**/metadata.csv
+.token
