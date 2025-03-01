@@ -41,12 +41,13 @@ with Path(base_path, "metadata.csv").open("w", newline="\n") as csv_file:
         word = path.stem
 
         try:
-            entry = to_grascii[word.lower()]
+            key = word.lower().strip(".")
+            entry = to_grascii[key]
             writer.writerow({
                 "file_name": path.relative_to(base_path),
                 "grascii_normalized": entry.grascii,
                 "longhand": entry.translation,
             })
-            del to_grascii[word.lower()]
+            del to_grascii[key]
         except KeyError:
-            print("no result for", word)
+            print("no result for:", word)
