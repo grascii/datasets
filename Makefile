@@ -8,7 +8,7 @@ clean:
 .PHONY: all clean $(datasets)
 
 gregg-preanniversary-words-dictionary = dictionaries/builtins/preanniversary
-gregg-preanniversary-phrases-dictionary = dictionaries/builtins/preanniversary-phrases-preview
+gregg-preanniversary-phrases-dictionary = dictionaries/builtins/preanniversary-phrases
 
 $(datasets): grascii/%: images/%/train/metadata.csv scripts/push.py
 	python scripts/push.py images/$* $@ --token $(HF_TOKEN)
