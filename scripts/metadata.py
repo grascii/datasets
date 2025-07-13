@@ -1,19 +1,18 @@
 """
 Create a metadata.csv for a set of images
 """
+
 import argparse
 import csv
 import glob
 import sys
 from pathlib import Path
 
-from grascii import RegexSearcher
+from grascii.dictionary import Dictionary
 
 
 argparser = argparse.ArgumentParser()
-argparser.add_argument(
-    "images", type=Path, help="path to an image directory"
-)
+argparser.add_argument("images", type=Path, help="path to an image directory")
 argparser.add_argument(
     "dictionary", type=Path, help="path to a normalized grascii dictionary"
 )
@@ -21,13 +20,12 @@ args = argparser.parse_args(sys.argv[1:])
 
 
 # dump all entries
-searcher = RegexSearcher(dictionaries=[args.dictionary])
-results = searcher.search(regexp=r".*")
+entries = Dictionary.new(args.dictionary).dump()
 
-# map translations to results
+# map translations to entries
 to_grascii = {}
-for result in results:
-    to_grascii[result.entry.translation.lower().strip(".")] = result.entry
+for entry in entries:
+    to_grascii[entry.translation.lower().strip(".")] = entry
 
 # create metadata.csv
 base_path = args.images.joinpath("train")
@@ -43,11 +41,13 @@ with Path(base_path, "metadata.csv").open("w", newline="\n") as csv_file:
         try:
             key = word.lower().strip(".")
             entry = to_grascii[key]
-            writer.writerow({
-                "file_name": path.relative_to(base_path),
-                "grascii_normalized": entry.grascii,
-                "longhand": entry.translation,
-            })
+            writer.writerow(
+                {
+                    "file_name": path.relative_to(base_path),
+                    "grascii_normalized": entry.grascii,
+                    "longhand": entry.translation,
+                }
+            )
             del to_grascii[key]
         except KeyError:
-            print("no result for:", word)
+            print("no entry for:", word)
