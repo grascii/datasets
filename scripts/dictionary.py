@@ -1,6 +1,7 @@
 """
 Build a dictionary with normalized grascii forms
 """
+
 import argparse
 import sys
 from pathlib import Path
@@ -8,26 +9,23 @@ from pathlib import Path
 from grascii import DictionaryBuilder
 from grascii.dictionary.build import DictionaryOutputOptions
 from grascii.dictionary.pipeline import standardize_case, CancelPipeline
-from grascii.parser import GrasciiParser
+from grascii.interpreter import GrasciiInterpreter
 from grascii.similarities import get_node
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument(
     "infiles", nargs="+", type=Path, help="the dictionary source files"
 )
-argparser.add_argument(
-    "output", type=Path, help="output directory"
-)
+argparser.add_argument("output", type=Path, help="output directory")
 args = argparser.parse_args(sys.argv[1:])
 
 
-parser = GrasciiParser()
+interpreter = GrasciiInterpreter()
 
 
-def parse(grascii, translation, logger):
-    try:
-        interpretation = next(parser.interpret(grascii))
-    except Exception:
+def normalize(grascii, translation, logger):
+    interpretation = interpreter.interpret(grascii)
+    if not interpretation:
         raise CancelPipeline()
     # filter out annotations
     filtered = filter(lambda x: not isinstance(x, list), interpretation)
@@ -37,11 +35,6 @@ def parse(grascii, translation, logger):
     return normalized, translation
 
 
-builder = DictionaryBuilder(
-    pipeline=[standardize_case, parse]
-)
+builder = DictionaryBuilder(pipeline=[standardize_case, normalize])
 
-builder.build(
-    infiles=args.infiles,
-    output=DictionaryOutputOptions(args.output)
-)
+builder.build(infiles=args.infiles, output=DictionaryOutputOptions(args.output))

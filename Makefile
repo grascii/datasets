@@ -1,4 +1,4 @@
-datasets = grascii/gregg-preanniversary-words
+datasets = grascii/gregg-preanniversary-words grascii/gregg-preanniversary-phrases
 
 all: $(datasets)
 
@@ -8,6 +8,7 @@ clean:
 .PHONY: all clean $(datasets)
 
 gregg-preanniversary-words-dictionary = dictionaries/builtins/preanniversary
+gregg-preanniversary-phrases-dictionary = dictionaries/builtins/preanniversary-phrases
 
 $(datasets): grascii/%: images/%/train/metadata.csv scripts/push.py
 	python scripts/push.py images/$* $@ --token $(HF_TOKEN)
@@ -17,5 +18,6 @@ images/%/train/metadata.csv: normalized/$$($$*-dictionary) images/%/train/[a-z] 
 	python scripts/metadata.py images/$* normalized/$($*-dictionary)
 
 normalized/%: %/*.txt scripts/dictionary.py
-	python scripts/dictionary.py $^ $@
+	python scripts/dictionary.py $*/*.txt $@
 
+.NOTINTERMEDIATE: normalized/%
