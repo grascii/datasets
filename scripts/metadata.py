@@ -25,7 +25,10 @@ entries = Dictionary.new(args.dictionary).dump()
 # map translations to entries
 to_grascii = {}
 for entry in entries:
-    to_grascii[entry.translation.lower().strip(".")] = entry
+    key = entry.translation.lower().strip(".")
+    if key in to_grascii:
+        print("Duplicate key:", key)
+    to_grascii[key] = entry
 
 # create metadata.csv
 base_path = args.images.joinpath("train")
