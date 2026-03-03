@@ -3,8 +3,8 @@ Create a metadata.csv for a set of images
 """
 
 import argparse
-import csv
 import glob
+import json
 import sys
 from pathlib import Path
 
@@ -30,12 +30,10 @@ for entry in entries:
         print("Duplicate key:", key)
     to_grascii[key] = entry
 
-# create metadata.csv
+# create metadata.jsonl
 base_path = args.images.joinpath("train")
-with Path(base_path, "metadata.csv").open("w", newline="\n") as csv_file:
+with Path(base_path, "metadata.jsonl").open("w", newline="\n") as jsonl_file:
     field_names = ["file_name", "grascii_normalized", "longhand"]
-    writer = csv.DictWriter(csv_file, fieldnames=field_names, dialect="unix")
-    writer.writeheader()
 
     for pathname in sorted(glob.glob(f"{base_path}/[a-z]/*.png")):
         path = Path(pathname)
@@ -44,13 +42,14 @@ with Path(base_path, "metadata.csv").open("w", newline="\n") as csv_file:
         try:
             key = word.lower().strip(".")
             entry = to_grascii[key]
-            writer.writerow(
+            jsonl_file.write(json.dumps(
                 {
-                    "file_name": path.relative_to(base_path),
+                    "file_name": str(path.relative_to(base_path)),
                     "grascii_normalized": entry.grascii,
                     "longhand": entry.translation,
                 }
-            )
+            ))
+            jsonl_file.write("\n")
             del to_grascii[key]
         except KeyError:
             print("no entry for:", word)

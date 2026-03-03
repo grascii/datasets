@@ -3,18 +3,18 @@ datasets = grascii/gregg-preanniversary-words grascii/gregg-preanniversary-phras
 all: $(datasets)
 
 clean:
-	rm -rf images/*/*/metadata.csv normalized
+	rm -rf images/*/*/metadata.jsonl normalized
 
 .PHONY: all clean $(datasets)
 
 gregg-preanniversary-words-dictionary = dictionaries/builtins/preanniversary
 gregg-preanniversary-phrases-dictionary = dictionaries/builtins/preanniversary-phrases
 
-$(datasets): grascii/%: images/%/train/metadata.csv scripts/push.py
+$(datasets): grascii/%: images/%/train/metadata.jsonl scripts/push.py
 	python scripts/push.py images/$* $@ --token $(HF_TOKEN)
 
 .SECONDEXPANSION:
-images/%/train/metadata.csv: normalized/$$($$*-dictionary) images/%/train/[a-z] scripts/metadata.py
+images/%/train/metadata.jsonl: normalized/$$($$*-dictionary) images/%/train/[a-z] scripts/metadata.py
 	python scripts/metadata.py images/$* normalized/$($*-dictionary)
 
 normalized/%: %/*.txt scripts/dictionary.py
