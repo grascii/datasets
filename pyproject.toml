@@ -5,4 +5,5 @@ requires-python = ">=3.10"
 dependencies = [
     "datasets>=4.6.1",
     "grascii>=0.7.0",
+    "pillow>=12.1.1",
 ]
