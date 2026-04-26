@@ -27,8 +27,12 @@ to_grascii = {}
 for entry in entries:
     key = entry.translation.lower().strip(".")
     if key in to_grascii:
-        print("Duplicate key:", key)
-    to_grascii[key] = entry
+        # Differentiate words with more than one possible grascii/pronunciation
+        to_grascii[f"{key}_{entry.grascii.lower().replace("-", "")}"] = entry
+        existing = to_grascii[key]
+        to_grascii[f"{key}_{existing.grascii.lower().replace("-", "")}"] = existing
+    else:
+        to_grascii[key] = entry
 
 # create metadata.jsonl
 base_path = args.images.joinpath("train")

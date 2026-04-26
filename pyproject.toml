@@ -1,9 +1,9 @@
 [project]
 name = "grascii-datasets"
-version = "2026.3.2"
+version = "2026.4.25"
 requires-python = ">=3.10"
 dependencies = [
     "datasets>=4.6.1",
-    "grascii>=0.7.0",
+    "grascii>=0.9.0",
     "pillow>=12.1.1",
 ]

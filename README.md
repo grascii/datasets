@@ -19,6 +19,12 @@ Images are taken from a scan of the dictionary at 175% zoom.
 
 This Grascii original dataset consists of images of shorthand forms from the 1924 *Gregg Shorthand Phrase Book*[^2].
 
+### [gregg-anniversary-words](https://huggingface.co/datasets/grascii/gregg-anniversary-words)
+
+This dataset consists of images of shorthand forms from the 1930 *Gregg Shorthand Dictionary*[^3].
+The images were derived from [halplatt/GreggDictionary](https://github.com/halplatt/GreggDictionary)
+and [jincheng-yang/shorthand-dictionary](https://github.com/jincheng-yang/shorthand-dictionary).
+
 ## Contributing
 
 Contributions are welcome!
@@ -44,3 +50,4 @@ the [dictionaries](https://github.com/grascii/dictionaries) repository instead.
 
 [^1]: Gregg, John Robert. Gregg Shorthand Dictionary. Gregg Publishing Company, 1916.
 [^2]: Gregg, John Robert. Gregg Shorthand Phrase Book. Gregg Publishing Company, 1924.
+[^3]: Gregg, John Robert. Gregg Shorthand Dictionary. Gregg Publishing Company, 1930.
