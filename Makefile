@@ -1,4 +1,4 @@
-datasets = grascii/gregg-preanniversary-words grascii/gregg-preanniversary-phrases grascii/gregg-anniversary-words
+datasets = grascii/gregg-preanniversary-words grascii/gregg-preanniversary-phrases grascii/gregg-anniversary-words grascii/gregg-anniversary-phrases
 
 all: $(datasets)
 
@@ -10,6 +10,7 @@ clean:
 gregg-preanniversary-words-dictionary = dictionaries/builtins/preanniversary
 gregg-preanniversary-phrases-dictionary = dictionaries/builtins/preanniversary-phrases
 gregg-anniversary-words-dictionary = dictionaries/builtins/anniversary
+gregg-anniversary-phrases-dictionary = dictionaries/builtins/anniversary-phrases
 
 $(datasets): grascii/%: images/%/train/metadata.jsonl scripts/push.py
 	python scripts/push.py images/$* $@ --token $(HF_TOKEN)
